@@ -8,26 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^ButtonPressBlock)();
+@interface Cell : UITableViewCell <UITableViewDataSource>
 
-@class CellButton;
+@property (nonatomic) int index;
+@property (nonatomic, strong)	IBOutlet UILabel *cellName;
+@property (nonatomic) CGFloat height;
 
-@interface Cell : UITableViewCell
-{
-	ButtonPressBlock	b0Function;
-	ButtonPressBlock	b1Function;
-	int					index;
-}
+@property (strong, nonatomic) IBOutlet UITableView *usersTable;
+@property (strong, nonatomic) NSMutableArray *users;
 
-@property (nonatomic, retain)	IBOutlet	CellButton*			button0;
-@property (nonatomic, retain)	IBOutlet	CellButton*			button1;
-@property (copy)							ButtonPressBlock	b0Function;
-@property (copy)							ButtonPressBlock	b1Function;
-@property (nonatomic)						int					index;
-@property (nonatomic, retain)	IBOutlet	UILabel*			cellName;
-
-
--(IBAction)buttonWasPressed:(id)sender;
 -(int)getHeight;
 -(void)expand;
 -(void)contract;

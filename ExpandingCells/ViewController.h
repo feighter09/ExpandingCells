@@ -10,10 +10,6 @@
 #import "Cell.h"
 
 @interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-{
-	NSArray*	dataSource;
-	Cell*		selectedCell;
-}
 
 @property (nonatomic, retain) NSArray*	dataSource;
 @property (nonatomic, retain) Cell*		selectedCell;

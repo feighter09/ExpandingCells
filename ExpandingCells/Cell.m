@@ -8,92 +8,59 @@
 
 #import "Cell.h"
 
-
 @implementation Cell
 
-
-@synthesize button0;
-@synthesize button1;
-@synthesize b0Function;
-@synthesize b1Function;
-@synthesize index;
-@synthesize cellName;
-
-
-
-
--(int)getHeight
-{
+-(int)getHeight {
 	return [self frame].size.height;
 }
 
-
-
-
--(void)expand
-{
-	 CGRect	oldFrame = [self frame];
-	 
-	 [self setFrame:CGRectMake(	oldFrame.origin.x,
-					oldFrame.origin.y,
-					oldFrame.size.width,
-					oldFrame.size.height * 2)];
+-(void)expand {
+  CGRect oldFrame = [self frame];
+  _height = _usersTable.contentSize.height + 44;
+  
+  [self setFrame:CGRectMake(	oldFrame.origin.x,
+                            oldFrame.origin.y,
+                            oldFrame.size.width,
+                            _height)];
 }
 
-
-
-
--(void)contract
-{
-	CGRect	oldFrame = [self frame];
-						 
-	[self setFrame:CGRectMake(	oldFrame.origin.x,
-					oldFrame.origin.y,
-					oldFrame.size.width,
-					oldFrame.size.height / 2)];
+-(void)contract {
+	CGRect oldFrame = [self frame];
+	_height = 44;
+  
+	[self setFrame:CGRectMake(  oldFrame.origin.x,
+                            oldFrame.origin.y,
+                            oldFrame.size.width,
+                            _height)];
 }
 
-
-
-
-#pragma mark IBActions
-
--(IBAction)buttonWasPressed:(id)sender
-{
-	CellButton*		button	= (CellButton*)sender;
-	ButtonPressBlock	f0	= [self b0Function];
-	ButtonPressBlock	f1	= [self b1Function];
-	
-	if (button == [self button0])
-	{
-		f0();
-	}
-	else
-	{
-		f1();
-	}
-}
-
-
-
-
-/*
-	Keep in mind that this function won't be called for these cells -- we're loading them
-	from a NIB, so you'll have to do any setup elsewhere
- */
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    
-	return self;
-}
-
-
-
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{	
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
 	[super setSelected:selected animated:animated];
+}
+
+- (void)setUsers:(NSMutableArray *)users {
+  _users = users;
+  [_usersTable setDataSource:self];
+  [_usersTable setScrollEnabled:NO];
+  [_usersTable reloadData];
+}
+
+#pragma mark - Table View DataSource
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+  
+  NSString *name = [[_users objectAtIndex:indexPath.row] objectForKey:@"name"];
+  NSString *val = [[_users objectAtIndex:indexPath.row] objectForKey:@"value"];
+  
+  [cell.textLabel setText:name];
+  [cell.detailTextLabel setText:val];
+  
+  return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+  return [_users count];
 }
 
 @end
